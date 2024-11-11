@@ -5,6 +5,8 @@ using Talabat.Api.Soluation2a.DTOs;
 using Talabat.Api.Soluation2a.Errors;
 using Talabat.core.Entities;
 using Talabat.core.Repostories.Contract;
+using Talabat.core.Specifications;
+using Talabat.core.Specifications.Product_Specs;
 
 namespace Talabat.Api.Soluation2a.Controllers
 {
@@ -37,10 +39,11 @@ namespace Talabat.Api.Soluation2a.Controllers
         //} 
         #endregion
 
-        [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        [HttpGet("Get All Products")]
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts( [FromQuery] ProductSpecParams specParams)
         {
-            var products = await _productsRepo.GetAllAsync();
+            var spec = new ProductWithBrandAndCategorySpecifications(specParams);
+            var products = await _productsRepo.GetAllWithSpecAsync(spec);
             var mappervalueProduct = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
 
             return Ok(mappervalueProduct); 
@@ -52,7 +55,8 @@ namespace Talabat.Api.Soluation2a.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToReturnDto>> GetProductById(int id)
         {
-            var product = await _productsRepo.GetAsync(id);
+            var spec = new ProductWithBrandAndCategorySpecifications(id);
+            var product = await _productsRepo.GetWithSpecAsync(spec);
             //var x = product.ToString();
 
             var mappervalueProduct = _mapper.Map<Product, ProductToReturnDto>(product);
