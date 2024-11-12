@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
+using StackExchange.Redis;
 using Talabat.Api.Soluation2a.Errors;
 using Talabat.Api.Soluation2a.Extensions;
 using Talabat.Api.Soluation2a.Helpers;
@@ -31,6 +32,16 @@ namespace Talabat.Api.Soluation2a
             webApplicationBuilder.Services.AddDbContext<StoreContext>(options =>
               options.UseNpgsql(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"))
             );
+
+            #region Comment For Db Radis
+
+            //webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serveceProvider) => 
+            //{
+            //    var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
+            //    return ConnectionMultiplexer.Connect(connection);
+            //}); 
+
+            #endregion
            
             //ApplicationServicesExtensions.AddApplicationServices(webApplicationBuilder.Services);
             webApplicationBuilder.Services.AddApplicationServices();

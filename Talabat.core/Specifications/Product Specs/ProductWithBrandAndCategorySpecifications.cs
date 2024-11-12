@@ -15,9 +15,11 @@ namespace Talabat.core.Specifications.Product_Specs
       
         //for object to get all product . not criteria  
         public ProductWithBrandAndCategorySpecifications(ProductSpecParams specParams) :
-                   base(p => (!specParams.BrandId.HasValue || p.BrandId == specParams.BrandId) &&
-                               (!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId)
-                   )
+           base(p => 
+                          (string.IsNullOrEmpty(specParams.Search) || p.Name.ToLower().Contains(specParams.Search ) ) &&
+                          ( !specParams.BrandId.HasValue || p.BrandId == specParams.BrandId) &&
+                          (!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId) 
+           )
         {
             IncludeMethods();
             if (!string.IsNullOrEmpty(specParams.Sort))

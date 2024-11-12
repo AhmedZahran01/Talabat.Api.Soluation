@@ -21,7 +21,11 @@ namespace Talabat.Api.Soluation2a.Extensions
             #endregion
 
             Services.AddScoped(typeof(IGenericRepostory<>), typeof(GenericRepostory<>));
-
+          
+            #region Comment For Db Radis
+            //Services.AddScoped(typeof(IBasketRepositoty), typeof(BasketRepository)); 
+            #endregion
+          
             //webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
             Services.AddAutoMapper(typeof(MappingProfiles));
 
