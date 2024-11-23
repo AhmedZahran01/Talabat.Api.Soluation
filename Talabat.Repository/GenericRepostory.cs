@@ -27,7 +27,7 @@ namespace Talabat.Repository
 
         #region Not Used Spec DP Region
 
-        public async Task<T?> GetAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             //if (typeof(T) == typeof(Product))
             //    return await  _dbContext.Set<Product>().Where(p => p.Id == id).Include(p => p.category)
@@ -50,28 +50,45 @@ namespace Talabat.Repository
 
         #endregion
 
-
+         
+        #region MyRegion
 
         public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
         {
-           return await ApplySpecifications(spec).ToListAsync();
+            return await ApplySpecifications(spec).ToListAsync();
         }
 
-        public async Task<T?> GetWithSpecAsync(ISpecifications<T> spec)
+        public async Task<T?> GetEntityWithSpecAsync(ISpecifications<T> spec)
         {
             return await ApplySpecifications(spec).FirstOrDefaultAsync();
         }
 
         public async Task<int> GetCountAsnc(ISpecifications<T> spec)
         {
-          return  await ApplySpecifications(spec).CountAsync();
+            return await ApplySpecifications(spec).CountAsync();
         }
 
-        private  IQueryable<T> ApplySpecifications(ISpecifications<T> spec)
+        private IQueryable<T> ApplySpecifications(ISpecifications<T> spec)
         {
             return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
         }
 
-       
+        #endregion
+
+        #region Add ... Region
+
+        public async Task AddAsync(T entity)
+         => await _dbContext.AddAsync(entity);
+
+        public void Update(T entity)
+         => _dbContext.Update(entity);
+
+
+        public void Delete(T entity)
+         => _dbContext.Remove(entity);
+
+        #endregion
+  
     }
+
 }

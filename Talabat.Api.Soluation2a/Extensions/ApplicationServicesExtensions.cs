@@ -2,15 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Api.Soluation2a.Errors;
 using Talabat.Api.Soluation2a.Helpers;
+using Talabat.core;
 using Talabat.core.Repostories.Contract;
+using Talabat.core.Services.Contract;
 using Talabat.Repository;
+using Talabat.Services;
 
 namespace Talabat.Api.Soluation2a.Extensions
 {
     public static class ApplicationServicesExtensions
     {
-        public  static IServiceCollection AddApplicationServices(this IServiceCollection Services)
+        public  static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
+            services.AddScoped(typeof(IProductService), typeof(ProductService));
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
             #region MyRegion
 
@@ -20,17 +28,17 @@ namespace Talabat.Api.Soluation2a.Extensions
 
             #endregion
 
-            Services.AddScoped(typeof(IGenericRepostory<>), typeof(GenericRepostory<>));
-          
+            //services.AddScoped(typeof(IGenericRepostory<>), typeof(GenericRepostory<>));
+
             #region Comment For Db Radis
-            //Services.AddScoped(typeof(IBasketRepositoty), typeof(BasketRepository)); 
+            services.AddScoped(typeof(IBasketRepositoty), typeof(BasketRepository));
             #endregion
-          
+
             //webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
-            Services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddAutoMapper(typeof(MappingProfiles));
 
 
-            Services.Configure<ApiBehaviorOptions>(options =>
+            services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (Actioncontext) =>
                 {
@@ -47,7 +55,7 @@ namespace Talabat.Api.Soluation2a.Extensions
                 };
             });
 
-            return Services;
+            return services;
         }
     }
 }
